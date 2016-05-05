@@ -16,12 +16,12 @@ if [ ! -f "$BASE_IMAGE" ]; then
 fi
 
 # Find programatively the sha256 of the selected image
-IMAGE_SHA566=$(curl  http://cloud-images.ubuntu.com/$UBUNTU_RELEASE/$BUILD_DATE/SHA256SUMS 2>&1 \
+IMAGE_SHA256=$(curl  http://cloud-images.ubuntu.com/$UBUNTU_RELEASE/$BUILD_DATE/SHA256SUMS 2>&1 \
                | grep "$BASE_IMAGE\$" \
                | awk '{print $1}')
 
-# echo "will work with $BASE_IMAGE_XZ => $IMAGE_SHA566"
-if ! sh -c "echo $IMAGE_SHA566 $BASE_IMAGE | sha256sum -c"; then
+# echo "will work with $BASE_IMAGE_XZ => $IMAGE_SHA256"
+if ! sh -c "echo $IMAGE_SHA256 $BASE_IMAGE | sha256sum -c"; then
   echo "Wrong checksum for $BASE_IMAGE. Has the image changed?"
   exit 1
 fi
