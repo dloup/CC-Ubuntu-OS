@@ -8,7 +8,7 @@ UBUNTU_VERSION="trusty"
 IMAGE_NAME="CC-Ubuntu14.04"
 UBUNTU_RELEASE="$UBUNTU_VERSION"
 BASE_IMAGE="$UBUNTU_VERSION-server-cloudimg-amd64-disk1.img"
-BUILD_DATE="20160610"
+BUILD_DATE="20161010"
 export DIB_RELEASE="$UBUNTU_VERSION"
 
 if [ ! -f "$BASE_IMAGE" ]; then
@@ -16,7 +16,7 @@ if [ ! -f "$BASE_IMAGE" ]; then
 fi
 
 # Find programatively the sha256 of the selected image
-IMAGE_SHA256=$(curl  http://cloud-images.ubuntu.com/$UBUNTU_RELEASE/$BUILD_DATE/SHA256SUMS 2>&1 \
+IMAGE_SHA256=$(curl http://cloud-images.ubuntu.com/$UBUNTU_RELEASE/$BUILD_DATE/SHA256SUMS 2>&1 \
                | grep "$BASE_IMAGE\$" \
                | awk '{print $1}')
 
