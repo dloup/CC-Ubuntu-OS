@@ -1,0 +1,35 @@
+#!/bin/bash
+set -eux
+OS_APPLY_CONFIG_VENV_DIR="/opt/stack/venvs/heat-config"
+
+manifest=$(get-pip-manifest ptyhon-heatclient python-zaqarclient)
+
+virtualenv --setuptools $OS_APPLY_CONFIG_VENV_DIR
+set +u
+source $OS_APPLY_CONFIG_VENV_DIR/bin/activate
+set -u
+
+if [ -n "$manifest" ]; then
+    use-pip-manifest $manifest
+else
+    # bug #1201253 : virtualenv-1.10.1 embeds setuptools-0.9.8, which
+    # doesn't manage correctly HTTPS sockets when downloading pbr from
+    # https://pypi.python.org/simple/ if using http_proxy and https_proxy
+    # envvars
+    $OS_APPLY_CONFIG_VENV_DIR/bin/pip install -U 'setuptools>=1.0'
+    # bug #1293812 : Avoid easy_install triggering on pbr.
+    $OS_APPLY_CONFIG_VENV_DIR/bin/pip install -U 'pbr>=0.11,<2.0'
+    $OS_APPLY_CONFIG_VENV_DIR/bin/pip install -U python-heatclient python-zaqarclient
+fi
+
+# Write the manifest of what was installed
+write-pip-manifest python-heatclient python-zaqarclient
+
+mv /usr/local/bin/heat-config-notify $OS_APPLY_CONFIG_VENV_DIR/bin/heat-config-notify 
+mv /usr/local/bin/heat-config-rebuild-deployed $OS_APPLY_CONFIG_VENV_DIR/bin/heat-config-rebuild-deployed
+ln -s $OS_APPLY_CONFIG_VENV_DIR/bin/heat-config-notify /usr/local/bin/heat-config-notify
+ln -s $OS_APPLY_CONFIG_VENV_DIR/bin/heat-config-rebuild-deployed /usr/local/bin/heat-rebuild-deployed
+
+set +u
+deactivate
+set -u
