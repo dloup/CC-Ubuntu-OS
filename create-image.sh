@@ -16,6 +16,16 @@ IMAGE_NAME="CC-Ubuntu14.04"
 BASE_IMAGE="ubuntu-$UBUNTU_VERSION-server-cloudimg-amd64-disk1.img"
 export DIB_RELEASE="$UBUNTU_ADJECTIVE"
 
+#Needed for Heat Agent
+if [ ! -d tripleo-image-elements ]; then
+  git clone https://git.openstack.org/openstack/tripleo-image-elements.git
+fi
+if [ ! -d heat-templates ]; then
+  git clone https://git.openstack.org/openstack/heat-templates.git
+fi
+#Fix : Install Heat agent in virtualenv to not interfere with Openstack packages
+cp python_fix heat-templates/hot/software-config/elements/heat-config/install.d/heat-config-source-install/50-heat-config-source
+
 URL_ROOT="https://cloud-images.ubuntu.com/releases/$UBUNTU_VERSION/$BUILD_DATE"
 if [ ! -f "$BASE_IMAGE" ]; then
     curl -L -O "$URL_ROOT/$BASE_IMAGE"
@@ -32,8 +42,18 @@ if ! sh -c "echo $IMAGE_SHA256 $BASE_IMAGE | sha256sum -c"; then
 fi
 
 export DIB_LOCAL_IMAGE=`pwd`/$BASE_IMAGE
-export ELEMENTS_PATH=`pwd`/elements
+export ELEMENTS_PATH='elements:tripleo-image-elements/elements:heat-templates/hot/software-config/elements'
 export LIBGUESTFS_BACKEND=direct
+
+# Install and configure the os-collect-config agent to poll the metadata
+# server (heat service or zaqar message queue and so on) for configuration
+# changes to execute
+export AGENT_ELEMENTS="os-collect-config os-refresh-config os-apply-config"
+
+# heat-config installs an os-refresh-config script which will invoke the
+# appropriate hook to perform configuration. The element heat-config-script
+# installs a hook to perform configuration with shell scripts
+export DEPLOYMENT_BASE_ELEMENTS="heat-config heat-config-script"
 
 OUTPUT_FILE="$1"
 if [ "$OUTPUT_FILE" == "" ]; then
@@ -53,7 +73,7 @@ if [ -f "$OUTPUT_FILE" ]; then
   rm -f "$OUTPUT_FILE"
 fi
 
-disk-image-create chameleon-common $ELEMENTS -o $OUTPUT_FILE
+disk-image-create chameleon-common $ELEMENTS $AGENT_ELEMENTS $DEPLOYMENT_BASE_ELEMENTS -o $OUTPUT_FILE
 
 if [ -f "$OUTPUT_FILE.qcow2" ]; then
   mv $OUTPUT_FILE.qcow2 $OUTPUT_FILE
