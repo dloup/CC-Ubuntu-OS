@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ ${DIB_DEBUG_TRACE:-0} -gt 0 ]; then
+    set -x
+fi
+set -eu
+set -o pipefail
+
+export DEBIAN_FRONTEND=noninteractive
+
+cd /tmp
+apt-get update -y && apt-get install -y git
+wget -q http://apt.puppetlabs.com/puppetlabs-release-pc1-trusty.deb && dpkg -i puppetlabs-release-pc1-trusty.deb
+wget https://apt.puppetlabs.com/pubkey.gpg && apt-key add pubkey.gpg
+apt-get update -y && apt-get install -y eatmydata lsb-release puppet-agent=1.5.2-1trusty
