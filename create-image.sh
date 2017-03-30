@@ -24,7 +24,7 @@ if [ ! -d heat-templates ]; then
   git clone https://git.openstack.org/openstack/heat-templates.git
 fi
 #Fix : Install Heat agent in virtualenv to not interfere with Openstack packages and fix typo
-rm python_fix heat-templates/hot/software-config/elements/heat-config/install.d/heat-config-source-install/50-heat-config-soure
+rm heat-templates/hot/software-config/elements/heat-config/install.d/heat-config-source-install/50-heat-config-soure
 cp python_fix heat-templates/hot/software-config/elements/heat-config/install.d/heat-config-source-install/50-heat-config-source
 chmod 775 heat-templates/hot/software-config/elements/heat-config/install.d/heat-config-source-install/50-heat-config-source
 
