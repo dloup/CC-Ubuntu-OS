@@ -12,7 +12,7 @@ UBUNTU_VERSION="14.04"
 # see https://cloud-images.ubuntu.com/releases/14.04/ for releases
 BUILD_DATE="release-20161213"
 
-IMAGE_NAME="CC-Ubuntu14.04"
+IMAGE_NAME="CC-Ubuntu-OS"
 BASE_IMAGE="ubuntu-$UBUNTU_VERSION-server-cloudimg-amd64-disk1.img"
 export DIB_RELEASE="$UBUNTU_ADJECTIVE"
 
