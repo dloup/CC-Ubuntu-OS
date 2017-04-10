@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [ ${DIB_DEBUG_TRACE:-0} -gt 0 ]; then
+    set -x
+fi
+set -eu
+set -o pipefail
+
+export DEBIAN_FRONTEND=noninteractive
+
+cd /tmp
+add-apt-repository cloud-archive:liberty -y
+apt-get update -y && apt-get install -y openstack-dashboard keystone neutron-server euca2ools python-nova nova-common python-numpy linux-headers-3.13.0-116-generic openvswitch-switch glance-api
