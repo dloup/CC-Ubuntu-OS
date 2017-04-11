@@ -10,4 +10,4 @@ export DEBIAN_FRONTEND=noninteractive
 
 cd /tmp
 add-apt-repository cloud-archive:liberty -y
-apt-get update -y && apt-get install -y openstack-dashboard keystone neutron-server euca2ools python-nova nova-common python-numpy linux-headers-3.13.0-116-generic openvswitch-switch glance-api
+apt-get update -y && apt-get install -y openstack-dashboard keystone neutron-server euca2ools python-nova nova-common python-numpy linux-headers-3.13.0-116-generic openvswitch-switch glance-api neutron-plugin-ml2 openvswitch-datapath-dkms neutron-l3-agent neutron-dhcp-agent glance-registry nova-api nova-cert nova-conductor nova-consoleauth
