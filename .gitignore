@@ -3,3 +3,5 @@ CC-Ubuntu*
 *.qcow2.xz
 *.img
 image.d
+heat-templates/
+tripleo-image-elements/
