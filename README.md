@@ -1,7 +1,9 @@
-# CC-Ubuntu14.04
+# OS-Liberty-Puppet
 
 This directory contains the scripts used to generate the Chameleon KVM and
-bare-metal Ubuntu images. It relies on diskimage-builder.
+bare-metal OS-Liberty-Puppet_base (on master) and OS-Liberty-Puppet_controller (on branch "controller") images. It relies on diskimage-builder.
+
+It is based on CC-Ubuntu-OS image, it adds Puppet and Heat agents.
 
 ## Installation
 
@@ -37,7 +39,7 @@ Converting image using qemu-img convert
 Image file image_ubuntu.qcow2 created...
 Image built in image_ubuntu.qcow2
 to add the image in glance run the following command:
-glance image-create --name "CC-Ubuntu14.04" --disk-format qcow2 --container-format bare --file image_ubuntu.qcow2
+glance image-create --name "OS-Liberty-Puppet_base" --disk-format qcow2 --container-format bare --file image_ubuntu.qcow2
 ```
 
 At the end of its execution, the script provides the Glance command that can be
